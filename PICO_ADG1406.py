@@ -1,3 +1,4 @@
+from utime import sleep
 from machine import Pin
 
 class PICO_ADG1406(object):
@@ -31,43 +32,46 @@ class PICO_ADG1406(object):
     
     def set_pins(self, stat=""):
         if len(stat) == 4:
-            self.A0.value(self.conv_to_01(stat[0]))
-            self.A1.value(self.conv_to_01(stat[1]))
-            self.A2.value(self.conv_to_01(stat[2]))
-            self.A3.value(self.conv_to_01(stat[3]))
+            self.A0.value(self.__conv_to_01(stat[0]))
+            self.A1.value(self.__conv_to_01(stat[1]))
+            self.A2.value(self.__conv_to_01(stat[2]))
+            self.A3.value(self.__conv_to_01(stat[3]))
         elif len(stat) == 5:
-            self.EN.value(self.conv_to_01(stat[0]))
-            self.A0.value(self.conv_to_01(stat[1]))
-            self.A1.value(self.conv_to_01(stat[2]))
-            self.A2.value(self.conv_to_01(stat[3]))
-            self.A3.value(self.conv_to_01(stat[4]))
+            self.EN.value(self.__conv_to_01(stat[0]))
+            self.A0.value(self.__conv_to_01(stat[1]))
+            self.A1.value(self.__conv_to_01(stat[2]))
+            self.A2.value(self.__conv_to_01(stat[3]))
+            self.A3.value(self.__conv_to_01(stat[4]))
         else:
             print("Input bits has to be 4 or 5-bit long")
             return -1
 
+        sleep(0.1)
         return 0
         
     def disable(self):
         self.EN.off()
+        sleep(0.1)
         return 0
     
     def enable(self):
         self.EN.on()
+        sleep(0.1)
         return 0
 
     def reset(self):
         self.set_pins("0000")
 
     def select_channel(self, nch):
-        bch = self.nch2bin(nch)
+        bch = self.__nch2bin(nch)
         bch += str(self.EN.value())
         self.set_pins(bch)
         return 0
 
-    def nch2bin(self, nch):
+    def __nch2bin(self, nch):
         return f"{bin(nch-1)[2:]:04d}"
 
-    def conv_to_01(self, anything):
+    def __conv_to_01(self, anything):
         return int(bool(int(anything)))
 
     # end of class
