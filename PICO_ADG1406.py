@@ -1,0 +1,74 @@
+from machine import Pin
+
+class PICO_ADG1406(object):
+    pins = []
+    EN = []
+    A0 = []
+    A1 = []
+    A2 = []
+    A3 = []
+
+    def __init__(self, pids=[]):
+        # initiate
+        self.configure_pins(pids)
+        self.configure_switches()
+
+    def configure_pins(self, pids):
+        if len(pids) != 4:
+            print("ADG1406 needs five pins assigned in the following order.")
+            print("EN, A0, A1, A2, A3")
+            return -1
+
+        self.EN = Pin(pids[0], mode=Pin.OUT)
+        self.A0 = Pin(pids[1], mode=Pin.OUT)
+        self.A1 = Pin(pids[2], mode=Pin.OUT)
+        self.A2 = Pin(pids[3], mode=Pin.OUT)
+        self.A3 = Pin(pids[4], mode=Pin.OUT)
+
+        self.disable()
+        
+        return 0
+    
+    def set_pins(self, stat=""):
+        if len(stat) == 4:
+            self.A0.value(self.conv_to_01(stat[0]))
+            self.A1.value(self.conv_to_01(stat[1]))
+            self.A2.value(self.conv_to_01(stat[2]))
+            self.A3.value(self.conv_to_01(stat[3]))
+        elif len(stat) == 5:
+            self.EN.value(self.conv_to_01(stat[0]))
+            self.A0.value(self.conv_to_01(stat[1]))
+            self.A1.value(self.conv_to_01(stat[2]))
+            self.A2.value(self.conv_to_01(stat[3]))
+            self.A3.value(self.conv_to_01(stat[4]))
+        else:
+            print("Input bits has to be 4 or 5-bit long")
+            return -1
+
+        return 0
+        
+    def disable(self):
+        self.EN.off()
+        return 0
+    
+    def enable(self):
+        self.EN.on()
+        return 0
+
+    def reset(self):
+        self.set_pins("0000")
+
+    def select_channel(self, nch):
+        bch = self.nch2bin(nch)
+        bch += str(self.EN.value())
+        self.set_pins(bch)
+        return 0
+
+    def nch2bin(self, nch):
+        return f"{bin(nch-1)[2:]:04d}"
+
+    def conv_to_01(self, anything):
+        return int(bool(int(anything)))
+
+    # end of class
+    
