@@ -51,14 +51,18 @@ GDR  -> P5 -> #2 S3A -> S6
 """
 
 # swithch = ij, where i is the ADG633 ID and j is switch id on ADG633
-HV = -1
+
+NC = -1
 GDR = 5
 
 probe1path = {"probe":1, "switch":11, "mux":1, "pad":1}
-probe2path = {"probe":2, "switch": 0, "mux":0, "pad":HV}
+probe2path = {"probe":2, "switch":NC, "mux":NC, "pad":NC}
 probe3path = {"probe":3, "switch":21, "mux":4, "pad":3}
 probe4path = {"probe":4, "switch":12, "mux":2, "pad":2}
 probe5path = {"probe":5, "switch":23, "mux":6, "pad":GDR}
 probe6path = {"probe":6, "switch":22, "mux":5, "pad":4}
+dummy      = {"probe":-1,"switch":13, "mux":3, "pad":NC}
 
-probe_path = [probe1path, probe2path, probe3path, probe4path, probe5path, probe6path]
+probe_path = [probe1path, probe2path, probe3path, probe4path, probe5path, probe6path, dummy]
+
+

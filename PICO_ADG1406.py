@@ -32,16 +32,16 @@ class PICO_ADG1406(object):
     
     def set_pins(self, stat=""):
         if len(stat) == 4:
-            self.A0.value(self.__conv_to_01(stat[0]))
-            self.A1.value(self.__conv_to_01(stat[1]))
-            self.A2.value(self.__conv_to_01(stat[2]))
-            self.A3.value(self.__conv_to_01(stat[3]))
-        elif len(stat) == 5:
-            self.EN.value(self.__conv_to_01(stat[0]))
-            self.A0.value(self.__conv_to_01(stat[1]))
+            self.A0.value(self.__conv_to_01(stat[3]))
             self.A1.value(self.__conv_to_01(stat[2]))
-            self.A2.value(self.__conv_to_01(stat[3]))
-            self.A3.value(self.__conv_to_01(stat[4]))
+            self.A2.value(self.__conv_to_01(stat[1]))
+            self.A3.value(self.__conv_to_01(stat[0]))
+        elif len(stat) == 5:
+            self.EN.value(self.__conv_to_01(stat[4]))
+            self.A0.value(self.__conv_to_01(stat[3]))
+            self.A1.value(self.__conv_to_01(stat[2]))
+            self.A2.value(self.__conv_to_01(stat[1]))
+            self.A3.value(self.__conv_to_01(stat[0]))
         else:
             print("Input bits has to be 4 or 5-bit long")
             return -1
@@ -69,7 +69,12 @@ class PICO_ADG1406(object):
         return 0
 
     def __nch2bin(self, nch):
-        return f"{bin(nch-1)[2:]:04d}"
+        if nch < 0:
+            raise "Invalid channel number"
+
+        nchb = int(bin(nch-1)[2:])
+         
+        return f"{nchb:04d}"
 
     def __conv_to_01(self, anything):
         return int(bool(int(anything)))

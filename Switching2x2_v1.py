@@ -21,11 +21,12 @@ class Switching2x2_v1(object):
     def __select_path(self, path):
         swi = path["switch"] // 10
         swj = path["switch"] % 10
-        muxi = path["mux"] // 100 
-        muxj = path["mux"] % 100
+        muxi = 0
+        muxj = path["mux"] 
 
-        self.ADG633[swi].sw[swj].on()
-        self.ADG1406[muxi].select_channel(muxj)
+        self.reset_all_sw()
+        self.ADG633[swi-1].sw[swj-1].on()
+        self.ADG1406[0].select_channel(muxj-1)
     
     def __find_path(self, name, val):
         for pp in probe_path:

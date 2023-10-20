@@ -1,4 +1,3 @@
-from utime import sleep
 from machine import Pin
 
 class PICO_ADG633(object):
@@ -20,11 +19,9 @@ class PICO_ADG633(object):
         
         def on(self):
             self.pin.off()
-            sleep(0.1)
         
         def off(self):
             self.pin.on()
-            sleep(0.1)
 
         def __call__(self):
             return int(not(self.pin.value()))
@@ -53,36 +50,33 @@ class PICO_ADG633(object):
     
     def set_pins(self, stat=""):
         if len(stat) == 4:
-            self.EN.value(self.__conv_to_01(stat[0]))
-            self.A0.value(self.__conv_to_01(stat[1]))
-            self.A1.value(self.__conv_to_01(stat[2]))
-            self.A2.value(self.__conv_to_01(stat[3]))
-        elif len(stat) == 3:
-            self.A0.value(self.__conv_to_01(stat[0]))
+            self.EN.value(self.__conv_to_01(stat[3]))
+            self.A0.value(self.__conv_to_01(stat[2]))
             self.A1.value(self.__conv_to_01(stat[1]))
-            self.A2.value(self.__conv_to_01(stat[2]))
+            self.A2.value(self.__conv_to_01(stat[0]))
+        elif len(stat) == 3:
+            self.A0.value(self.__conv_to_01(stat[2]))
+            self.A1.value(self.__conv_to_01(stat[1]))
+            self.A2.value(self.__conv_to_01(stat[0]))
         else:
             print("Input bits has to be 4-bit long")
             return -1
 
-        sleep(0.1)
         return 0
         
     def disable(self):
         self.EN.on()
-        sleep(0.1)
         return 0
     
     def enable(self):
         self.EN.off()
-        sleep(0.1)
         return 0
 
     def reset(self): # set all switches to off (B state)
         self.set_pins("111")
         return 0
 
-    def __conv_to_01(anything):
+    def __conv_to_01(self, anything):
         return int(bool(int(anything)))
 
     # end of class
