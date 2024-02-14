@@ -33,7 +33,7 @@ class Switching2x2_v1(object):
             if pp[name] == val:
                 return pp
 
-        print ("WARNING: Cannot find the path for the given input {name}={val}")
+        print (f"WARNING: Cannot find the path for the given input {name}={val}")
 
         return None
 

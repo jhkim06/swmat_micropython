@@ -1,18 +1,18 @@
 import utime
+import usbcomm
 from Switching2x2_v1 import Switching2x2_v1
 
 def main():
-    swm = Switching2x2_v1()
+    swm = Switching2x2_v1() 
     swm.enable()
+    
+    utime.sleep(1) 
 
-    utime.sleep(1)
+    swm.reset_all_sw()
 
-    for i in range(100):
-        swm.select_mux(i%6)
-        utime.sleep(1)
-
-    sw.reset_all_sw()
-    sw.disable()
+    while True:
+        Nsw = usbcomm.listen()
+        swm.select_mux(Nsw)
 
 if __name__ == "__main__":
     main()
