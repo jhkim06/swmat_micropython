@@ -12,10 +12,9 @@ class PICO_ADG1406(object):
     def __init__(self, pids=[]):
         # initiate
         self.configure_pins(pids)
-        self.configure_switches()
 
     def configure_pins(self, pids):
-        if len(pids) != 4:
+        if len(pids) != 5:
             print("ADG1406 needs five pins assigned in the following order.")
             print("EN, A0, A1, A2, A3")
             return -1

@@ -3,14 +3,15 @@
 #################################################
 
 # see pin_v1.md for pin setup
+from machine import Pin
 from PICO_ADG633 import PICO_ADG633
 from PICO_ADG1406 import PICO_ADG1406
 from pin_v1 import *
 
 
 class Switching2x2_v1(object):
-    self.ADG633 = []
-    self.ADG1406 = []
+    ADG633 = []
+    ADG1406 = []
 
     def __init__(self):
         self.ADG633.append(PICO_ADG633(pin_ADG633_1))
@@ -58,10 +59,16 @@ class Switching2x2_v1(object):
         self.__select_path(self, path)
         
     def reset_all_sw(self):
-        for sw in ADG633:
+        for sw in self.ADG633:
             sw.reset()
 
     def select_switch(self, nsw):
-        self.select_mux(6 - mux)
+        isw = nsw // 3
+        jsw = nsw % 3
+        imux = 5 - nsw
+
+        self.reset_all_sw()
+        self.ADG633[isw].sw[jsw].on()
+        self.ADG1406[0].select_channel(imux)
 
     # end of class
