@@ -20,3 +20,7 @@ class LED:
             self.off()
             utime.sleep(0.1)
 
+    def indicate_error(self):
+        while True:
+            self.led_pin.toggle()
+            utime.sleep(0.5)

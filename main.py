@@ -23,8 +23,7 @@ def main():
             led.indicate_sw(Nsw) 
             swm.select_switch(Nsw)
         except:
-            led.on()
-            raise
+            led.indicate_error()
 
 if __name__ == "__main__":
     main()
