@@ -12,7 +12,7 @@ def main():
 
     while True:
         Nsw = usbcomm.listen()
-        swm.select_mux(Nsw)
+        swm.select_switch(Nsw)
 
 if __name__ == "__main__":
     main()

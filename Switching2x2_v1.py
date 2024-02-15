@@ -61,4 +61,7 @@ class Switching2x2_v1(object):
         for sw in ADG633:
             sw.reset()
 
+    def select_switch(self, nsw):
+        self.select_mux(6 - mux)
+
     # end of class
