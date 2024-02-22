@@ -70,5 +70,6 @@ class Switching2x2_v1(object):
         self.reset_all_sw()
         self.ADG633[isw].sw[jsw].on()
         self.ADG1406[0].select_channel(imux)
+        self.enable()
 
     # end of class
