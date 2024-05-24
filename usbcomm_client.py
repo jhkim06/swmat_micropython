@@ -27,7 +27,8 @@ class usbcomm:
 def main():
     comm = usbcomm()
     print (comm.listports())
-    comm.connect("/dev/cu.usbmodem13301")
+    # comm.connect("/dev/cu.usbmodem13301")
+    comm.connect("COM3")
     ret = comm.send_data(3)
     print (ret)
 
