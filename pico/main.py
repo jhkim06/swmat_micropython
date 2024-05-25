@@ -26,7 +26,7 @@ def main():
             Nsw = int(Nsw)
 
             led.indicate_sw(Nsw) 
-            swm.select_switch(Nsw)
+            swm.select_switch(Nsw) # TODO handle index error
             line = pre + f"{Nsw}" 
 
             display(line)

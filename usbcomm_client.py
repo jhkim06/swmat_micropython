@@ -1,5 +1,10 @@
 import serial
 from serial.tools import list_ports
+import argparse
+
+parser = argparse.ArgumentParser(description='Send an integer to pico')
+parser.add_argument('integer', type=int, nargs='?', default=1, help='an interger to send to pico')
+args = parser.parse_args()
 
 class usbcomm:
     ser = []
@@ -26,10 +31,11 @@ class usbcomm:
 
 def main():
     comm = usbcomm()
-    print (comm.listports())
+    # print (comm.listports())
     # comm.connect("/dev/cu.usbmodem13301")
     comm.connect("COM3")
-    ret = comm.send_data(3)
+    print('Send ', args.integer)
+    ret = comm.send_data(args.integer)
     print (ret)
 
 
