@@ -6,7 +6,6 @@ from seg7ctl import display
 
 def main():
     swm = Switching2x2_v2() 
-    swm.enable()
 
     led = LED()
     led.on()
@@ -14,8 +13,6 @@ def main():
     led.off()
     
     utime.sleep(1) 
-
-    swm.reset_all_sw()
 
     pre = "CH "
 
@@ -25,10 +22,11 @@ def main():
             Nsw = int(Nsw)
 
             led.indicate_sw(Nsw) 
-            swm.select_switch(Nsw)
+            swm.disable_all_switches()
+            swm.enable_switch(Nsw)
 
             line = pre + f"{Nsw}" 
-            display(line)
+            # display(line)
         except:
             led.indicate_error()
 

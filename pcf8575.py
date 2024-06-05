@@ -39,7 +39,7 @@ class PCF8575:
             return (self._port[pin // 8] >> (pin % 8)) & 1
         if value:
             self._port[pin // 8] |= 1 << (pin % 8)
-            print(self._port[pin //8])
+            # print(self._port[pin //8])
         else:
             self._port[pin // 8] &= ~(1 << (pin % 8))
         self._write()
@@ -80,4 +80,4 @@ class PCF8575:
 
     def _write(self):
         ack =self._i2c.writeto(self._address, self._port)
-        print(ack)
+        # print(ack)

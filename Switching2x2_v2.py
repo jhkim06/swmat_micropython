@@ -26,6 +26,7 @@ class Switching2x2_v2:
         self.pico_i2c = PICOI2C() 
 
         self.__init_pcfs()
+        self.disable_all_switches()
 
     def __init_pcfs(self):
         for i2c_id, i2c, address in self.pico_i2c.get_all_address():
@@ -42,6 +43,15 @@ class Switching2x2_v2:
         for key in self.PCFs:
             print(f'#{key} PCF is connected')
 
+    def print_pin_status_on_pcf(self, pcf_id=8):
+        self.PCFs[pcf_id].print_pins()
+
+    # report all switch status
+    def report_switch_status(self):
+        for key in self.PCFs:
+            print(f'#{key} PCF pin status')
+            self.print_pin_status_on_pcf(key)
+
     def enable_switch(self, nsw):
         pin_num = self.__switch_num_to_pin_num(nsw)
         self.PCFs[switch_to_pcf_map[nsw]].pin(pin_num, ON)
@@ -50,5 +60,7 @@ class Switching2x2_v2:
         pin_num = self.__switch_num_to_pin_num(nsw)
         self.PCFs[switch_to_pcf_map[nsw]].pin(pin_num, OFF)
 
-    def print_pin_status_on_pcf(self, pcf_id=8):
-        self.PCFs[pcf_id].print_pins()
+    def disable_all_switches(self):
+        for key in self.PCFs:
+            self.PCFs[key].port = 0x0000
+
