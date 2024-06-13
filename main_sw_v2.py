@@ -21,12 +21,15 @@ def main():
             Nsw = usbcomm.listen()
             Nsw = int(Nsw)
 
-            led.indicate_sw(Nsw) 
+            # use 7-segment display to indicate sw number
+            line = pre + f"{Nsw}" 
+            display(line)
+
             swm.disable_all_switches()
             swm.enable_switch(Nsw)
 
-            line = pre + f"{Nsw}" 
-            # display(line)
+        except KeyboardInterrupt:
+            break
         except:
             led.indicate_error()
 

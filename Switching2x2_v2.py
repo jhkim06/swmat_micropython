@@ -1,15 +1,15 @@
 import pcf8575
 from PICOI2C import PICOI2C
+import utime
 
 switch_to_pcf_map = {
         0: 8, 1: 8,  2: 8,  3: 8,  4: 8,  5: 8,  6: 8,  7: 8,
         8: 8, 9: 8, 10: 8, 11: 8, 12: 8, 13: 8, 14: 8, 15: 8,
-
-        16: 1, 17: 1, 18: 1, 19: 1, 20: 1, 21: 1, 22: 1, 23: 1,
-        24: 1, 25: 1, 26: 1, 27: 1, 28: 1, 29: 1, 30: 1, 31: 1,
 }
 
 i2c_to_pcf_map = {
+        # key format: <Pico I2C controller#>_<ADDRESS>
+        # currently only '1_32' available
         '0_32': 0, '0_33': 1, '0_34':  2, '0_35':  3, '0_36':  4, '0_37':  5, '0_38':  6, '0_37':  7,
         '1_32': 8, '1_33': 9, '1_34': 10, '1_35': 11, '1_36': 12, '1_37': 13, '1_38': 14, '1_37': 15,
 }
@@ -26,6 +26,7 @@ class Switching2x2_v2:
         self.pico_i2c = PICOI2C() 
 
         self.__init_pcfs()
+        # TODO use error handle for the case no i2c found
         self.disable_all_switches()
 
     def __init_pcfs(self):
@@ -33,7 +34,7 @@ class Switching2x2_v2:
             pcf_id = i2c_to_pcf_map[str(i2c_id) + '_' + str(address)]
             self.PCFs[pcf_id] = pcf8575.PCF8575(i2c, address)
 
-    def __switch_num_to_pin_num(self, switch_num):
+    def _switch_to_pin_num(self, switch_num):
         pin_num = switch_num % 16
         if pin_num > 7:
             pin_num += 2
@@ -52,12 +53,14 @@ class Switching2x2_v2:
             print(f'#{key} PCF pin status')
             self.print_pin_status_on_pcf(key)
 
-    def enable_switch(self, nsw):
-        pin_num = self.__switch_num_to_pin_num(nsw)
+    def enable_switch(self, nsw, exclusive=True):
+        if exclusive:
+            self.disable_all_switches()
+        pin_num = self._switch_to_pin_num(nsw)
         self.PCFs[switch_to_pcf_map[nsw]].pin(pin_num, ON)
 
     def disable_switch(self, nsw):
-        pin_num = self.__switch_num_to_pin_num(nsw)
+        pin_num = self._switch_to_pin_num(nsw)
         self.PCFs[switch_to_pcf_map[nsw]].pin(pin_num, OFF)
 
     def disable_all_switches(self):
